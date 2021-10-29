@@ -14,13 +14,15 @@ import rootApp from './App.vue'
 
 import router from './router'
 import store from './store'
-import syRequest from './service'
+import { setupStore } from './store'
+// import syRequest from './service'
 
 const app: App = createApp(rootApp)
 
 // golbalRegister(app)
 app.use(router)
 app.use(store)
+setupStore()
 // 注册element-plus
 app.use(golbalRegister)
 // 注册

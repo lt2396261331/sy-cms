@@ -20,11 +20,13 @@ import { setupStore } from './store'
 const app: App = createApp(rootApp)
 
 // golbalRegister(app)
-app.use(router)
+app.use(golbalRegister)
 app.use(store)
 setupStore()
+// path: /user => user
+app.use(router)
+
 // 注册element-plus
-app.use(golbalRegister)
 // 注册
 // app.use(ElementPlus)
 app.mount('#app')

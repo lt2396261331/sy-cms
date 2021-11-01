@@ -9,7 +9,15 @@ import {
   ElTabPane,
   ElIcon,
   ElLink,
-  ElCheckbox
+  ElCheckbox,
+  ElContainer,
+  ElAside,
+  ElHeader,
+  ElMain,
+  ElMenu,
+  ElMenuItem,
+  ElSubMenu,
+  ElMenuItemGroup
 } from 'element-plus'
 
 import { UserFilled } from '@element-plus/icons'
@@ -25,7 +33,15 @@ const components = [
   ElIcon,
   UserFilled,
   ElLink,
-  ElCheckbox
+  ElCheckbox,
+  ElContainer,
+  ElAside,
+  ElHeader,
+  ElMain,
+  ElMenu,
+  ElMenuItem,
+  ElSubMenu,
+  ElMenuItemGroup
 ]
 
 export default function (app: App): void {

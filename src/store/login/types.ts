@@ -3,8 +3,3 @@ export interface ILoginState {
   userInfo: any
   userMenus: any
 }
-
-export interface IRootState {
-  name: string
-  age: number
-}

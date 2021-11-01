@@ -6,3 +6,5 @@ declare module '*.vue' {
 }
 
 declare let $store: ary
+
+declare const $filters: any

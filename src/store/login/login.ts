@@ -1,6 +1,7 @@
 import { Module } from 'vuex'
 
-import { ILoginState, IRootState } from '../type'
+import { ILoginState } from './types'
+import { IRootState } from '../types'
 import { IAccount } from '@/service/login/type'
 import router from '@/router'
 
@@ -10,6 +11,7 @@ import {
   requestUserInfoMenusByRoleId
 } from '@/service/login/login'
 import localCache from '@/utils/cache'
+import { mapMenusToRouter } from '@/utils/mapMenus'
 
 const LoginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -30,6 +32,14 @@ const LoginModule: Module<ILoginState, IRootState> = {
     },
     changeUserMenus(state, userMenus: any) {
       state.userMenus = [...userMenus]
+
+      // userMenus --> routes
+      const routes = mapMenusToRouter(userMenus)
+      // 将routes添加到原来的router.main.childen
+      routes.forEach((route) => {
+        router.addRoute('main', route)
+      })
+      console.log(router.getRoutes())
     }
   },
   actions: {

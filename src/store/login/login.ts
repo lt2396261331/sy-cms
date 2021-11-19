@@ -11,7 +11,7 @@ import {
   requestUserInfoMenusByRoleId
 } from '@/service/login/login'
 import localCache from '@/utils/cache'
-import { mapMenusToRouter } from '@/utils/mapMenus'
+import { mapMenusToRouter, mapMenusToPermissions } from '@/utils/mapMenus'
 
 const LoginModule: Module<ILoginState, IRootState> = {
   namespaced: true,
@@ -19,7 +19,8 @@ const LoginModule: Module<ILoginState, IRootState> = {
     return {
       token: '',
       userInfo: {},
-      userMenus: []
+      userMenus: [],
+      permission: []
     }
   },
   getters: {},
@@ -40,20 +41,27 @@ const LoginModule: Module<ILoginState, IRootState> = {
         router.addRoute('main', route)
       })
       console.log(router.getRoutes())
+
+      // 获取用户按钮权限
+      const permission = mapMenusToPermissions(userMenus)
+      state.permission = permission
     }
   },
   actions: {
-    async accountLoginAction({ commit }, payload: IAccount) {
+    async accountLoginAction({ commit, dispatch }, payload: IAccount) {
       // 1.执行登录逻辑
       const LoginResult = await accountLoginRequest(payload)
       const { id, token } = LoginResult.data
       commit('changeToken', token)
       localCache.setCache('token', token)
 
+      // 发送初始化的请求(完整的role/department)
+      dispatch('getInitialDataAction', null, { root: true })
+
       // 2.请求用户信息的数据
       const userInfoResult = await requestUserInfoById(id)
       const userInfo = userInfoResult.data
-      // console.log(userInfo)
+      console.log(userInfo)
       commit('changeUserInfo', userInfo)
       localCache.setCache('userInfo', userInfo)
 
@@ -64,15 +72,17 @@ const LoginModule: Module<ILoginState, IRootState> = {
       const userMenus = userMenusResult.data
       commit('changeUserMenus', userMenus)
       localCache.setCache('userMenus', userMenus)
-      console.log(userMenus)
+      // console.log(userMenus)
 
       // 4.跳转到首页
       router.push('/main')
     },
-    loadLocalLogin({ commit }) {
+    loadLocalLogin({ commit, dispatch }) {
       const token = localCache.getCache('token')
       if (token) {
         commit('changeToken', token)
+        // 发送初始化的请求(完整的role/department)
+        dispatch('getInitialDataAction', null, { root: true })
       }
       const userInfo = localCache.getCache('userInfo')
       if (userInfo) {

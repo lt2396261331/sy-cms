@@ -43,7 +43,7 @@ export default defineComponent({
   },
   setup() {
     // 1.定义属性
-    const iskeepPasswrod = ref(false)
+    const iskeepPasswrod = ref(true)
     const accountRef = ref<InstanceType<typeof LoginAccount>>()
     const iphoneRef = ref<InstanceType<typeof LoginPhone>>()
     const currentTab = ref('account')

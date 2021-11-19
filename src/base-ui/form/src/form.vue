@@ -8,6 +8,7 @@
         <template v-for="item in formItems" :key="item.labe">
           <el-col v-bind="colLayout">
             <el-form-item
+              v-if="!item.isHidden"
               :label="item.lable"
               :rules="item.rules"
               :style="itemStyle"
@@ -32,7 +33,7 @@
                 >
                   <el-option
                     v-for="option in item.options"
-                    :value="option.value"
+                    :value="option.title"
                     :key="option.value"
                     >{{ option.title }}</el-option
                   >
@@ -57,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch, computed } from 'vue'
+import { defineComponent, PropType, ref, watch } from 'vue'
 
 import type { IFormItem } from '../types'
 
@@ -98,12 +99,12 @@ export default defineComponent({
       deep: true
     })
 
-    watch(
-      () => props.modelValue,
-      (newValue) => {
-        formData.value = { ...newValue }
-      }
-    )
+    // watch(
+    //   () => props.modelValue,
+    //   (newValue) => {
+    //     formData.value = { ...newValue }
+    //   }
+    // )
 
     return {
       formData

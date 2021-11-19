@@ -13,6 +13,7 @@
       border
       style="width: 100%"
       @selection-change="handlerSelection"
+      v-bind="childrenProps"
     >
       <el-table-column
         v-if="showSelectColumn"
@@ -28,7 +29,7 @@
         width="80"
       ></el-table-column>
       <template v-for="propItem in propList" :key="propItem.prop">
-        <el-table-column align="center" v-bind="propItem">
+        <el-table-column align="center" v-bind="propItem" show-overflow-tooltip>
           <template #default="scope">
             <slot :name="propItem.slotName" :row="scope.row">
               {{ scope.row[propItem.prop] }}
@@ -39,15 +40,15 @@
     </el-table>
     <div class="footer">
       <slot name="footer">
-        <div class="demo-pagination-block">
+        <div class="demo-pagination-block" v-if="showFooter">
           <el-pagination
-            v-model:currentPage="currentPage4"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
+            v-model:currentPage="page.currentPage"
+            :page-size="page.pageSize"
+            :page-sizes="[10, 20, 30, 40]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="listCount"
+            @size-change="handleSizeChange"
           >
           </el-pagination>
         </div>
@@ -77,19 +78,46 @@ export default defineComponent({
       type: Array,
       required: true
     },
+    listCount: {
+      type: Number,
+      default: 0
+    },
     propList: {
       type: Array as PropType<any[]>,
       required: true
+    },
+    page: {
+      type: Object,
+      default: () => ({ currentPage: 0, pageSize: 10 })
+    },
+    childrenProps: {
+      type: Object,
+      default: () => ({})
+    },
+    showFooter: {
+      type: Boolean,
+      default: true
     }
   },
-  emits: ['selectionChange'],
+  emits: ['selectionChange', 'update:page'],
   setup(props, { emit }) {
     const handlerSelection = (value: any) => {
       console.log(value)
       emit('selectionChange', value)
     }
+
+    const handleCurrentChange = (currentPage: number) => {
+      emit('update:page', { ...props.page, currentPage })
+    }
+
+    const handleSizeChange = (pageSize: number) => {
+      emit('update:page', { ...props.page, pageSize })
+    }
+
     return {
-      handlerSelection
+      handlerSelection,
+      handleCurrentChange,
+      handleSizeChange
     }
   }
 })

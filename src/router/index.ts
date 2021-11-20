@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import localeCache from '@/utils/cache'
 import type { RouteRecordRaw } from 'vue-router'
-import { firstMenu } from '@/utils/mapMenus'
+import { firstMenu } from '@/utils/map-menus'
 
 const routes: RouteRecordRaw[] = [
   {

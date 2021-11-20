@@ -55,7 +55,7 @@ import { defineComponent, computed, ref } from 'vue'
 import { useStore } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
 
-import { pathMapToMenu } from '@/utils/mapMenus'
+import { pathMapToMenu } from '@/utils/map-menus'
 
 export default defineComponent({
   props: {

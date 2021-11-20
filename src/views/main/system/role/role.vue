@@ -10,17 +10,33 @@
     <page-modal
       pageName="role"
       :modalConfig="modalConfig"
+      :otherInfo="otherInfo"
       :defaultInfo="defaultInfo"
       ref="pageModalRef"
     >
-      <template #default>
-      </template>
+      <div class="menu-tree">
+        <el-tree
+          ref="elTreeRef"
+          :data="menus"
+          show-checkbox
+          node-key="id"
+          :props="{ children: 'children', label: 'name', disabled: '' }"
+          @check="handleCheckChange"
+        >
+        </el-tree>
+      </div>
     </page-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed, ref, nextTick } from 'vue'
+
+import { useStore } from '@/store'
+
+import { ElTree } from 'element-plus'
+
+import { menuMapLeafKeys } from '@/utils/map-menus'
 
 import { contentTableConfig } from './config/content.config'
 import { searchFormConfig } from './config/search.config'
@@ -40,8 +56,27 @@ export default defineComponent({
     PageModal
   },
   setup() {
+    // 1.处理usePageModal的hook
+    const elTreeRef = ref<InstanceType<typeof ElTree>>()
+    const editCallBack = (item: any) => {
+      const leafKeys = menuMapLeafKeys(item.menuList)
+      nextTick(() => {
+        console.log(elTreeRef.value)
+        elTreeRef.value?.setCheckedKeys(leafKeys, false)
+      })
+    }
     const [pageModalRef, defaultInfo, handleNewData, handleEditData] =
-      usePageModal()
+      usePageModal(undefined, editCallBack)
+    const store = useStore()
+    const menus = computed(() => store.state.entireMenu)
+
+    const otherInfo = ref({})
+    const handleCheckChange = (data1: any, data2: any) => {
+      const checkedKeys = data2.checkedKeys
+      const halfCheckedKeys = data2.halfCheckedKeys
+      const menuList = [...checkedKeys, ...halfCheckedKeys]
+      otherInfo.value = { menuList }
+    }
 
     return {
       contentTableConfig,
@@ -50,10 +85,18 @@ export default defineComponent({
       pageModalRef,
       defaultInfo,
       handleNewData,
-      handleEditData
+      handleEditData,
+      menus,
+      otherInfo,
+      handleCheckChange,
+      elTreeRef
     }
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped lang="less">
+.menu-tree {
+  margin-left: 25px;
+}
+</style>

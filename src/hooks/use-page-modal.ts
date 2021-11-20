@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import pageModal from '@/components/page-modal'
 
 type CallbackFn = () => void
-type EditbackFn = () => void
+type EditbackFn = (item?: any) => void
 
 export function usePageModal(
   newCallback?: CallbackFn,
@@ -23,7 +23,8 @@ export function usePageModal(
     if (pageModalRef.value) {
       pageModalRef.value.dialogVisible = true
     }
-    editCallback && editCallback()
+    console.log('点击了编辑按钮')
+    editCallback && editCallback(item)
   }
   console.log('123')
 

@@ -40,6 +40,10 @@ export default defineComponent({
       type: Object,
       default: () => ({})
     },
+    otherInfo: {
+      type: Object,
+      default: () => ({})
+    },
     pageName: {
       type: String,
       required: true
@@ -66,7 +70,7 @@ export default defineComponent({
         // 编辑
         store.dispatch('system/eidtPageDataAction', {
           pageName: props.pageName,
-          editData: { ...formDate.value },
+          editData: { ...formDate.value, ...props.otherInfo },
           id: props.defaultInfo.id
         })
       } else {
@@ -74,7 +78,7 @@ export default defineComponent({
         console.log('新建用户')
         store.dispatch('system/createPageDataAction', {
           pageName: props.pageName,
-          newData: { ...formDate.value }
+          newData: { ...formDate.value, ...props.otherInfo }
         })
       }
     }

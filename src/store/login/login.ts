@@ -11,7 +11,7 @@ import {
   requestUserInfoMenusByRoleId
 } from '@/service/login/login'
 import localCache from '@/utils/cache'
-import { mapMenusToRouter, mapMenusToPermissions } from '@/utils/mapMenus'
+import { mapMenusToRouter, mapMenusToPermissions } from '@/utils/map-menus'
 
 const LoginModule: Module<ILoginState, IRootState> = {
   namespaced: true,

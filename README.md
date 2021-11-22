@@ -1,9 +1,9 @@
-# vue3-ts-cms
+# cms后台管理系统
 
 ## Project setup
 
 ```
-npm install
+学习vue3+ts 进行的项目练习，主要技术栈：vue3 + ts + element-plus + echarts + axios
 ```
 
 ### Compiles and hot-reloads for development
